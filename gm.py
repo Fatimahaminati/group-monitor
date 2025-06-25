@@ -28,9 +28,9 @@ def start():
     fake_names = True if 'fake' in request.args else False
     notification = ''
     if 'success' in request.args:
-        notification = 'Data Berhasil disimpan!'
+        notification = 'Einträge wurden gespeichert!'
     if 'cleared' in request.args:
-        notification = 'Semua Entri Berhasil dihapus!'
+        notification = 'Einträge wurden gelöscht!'
     return render_template('index.html', heading='Gruppen-Monitor',
                            content=build_group_form(groups, fake_names=fake_names), notification=notification)
 
@@ -79,10 +79,12 @@ def monitor(no):
         return render_template('index.html', heading=f'Fehlerhafte Gruppennummer',
                                content=f'Gruppe {no} gibt es nicht!', notification='')
 
+#Generate hashed password sekali saja
+hashed_pw = generate_password_hash('1234')
 
 @auth.verify_password
 def verify_password(username, password):
-    if check_password_hash(generate_password_hash('1234'), password):
+    if username == '1234' and check_password_hash(hashed_pw, password):
         return username
     return None
 
